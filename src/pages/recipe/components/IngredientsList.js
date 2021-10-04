@@ -19,7 +19,7 @@ function IngredientsList(props) {
 
             for(let i = 0; i < data.data.length; i++) {
                 let item = {
-                    uid: data.data[i].uid,
+                    uid: data.data[i].id_rIngredients,
                     name: data.data[i].name,
                     amount: data.data[i].amount,
                     style: data.data[i].style
