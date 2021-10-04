@@ -13,7 +13,7 @@ function IngredientsList(props) {
     // Load ingredients
     useEffect(() => {
         // Load ingredients
-        let api = "http://localhost:3002/api/getIngredients/" + props.id;
+        let api = "https://jeans-recipe-book.herokuapp.com" + props.id;
         Axios.get(api).then((data) => {
             let items = [];
 
