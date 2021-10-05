@@ -29,7 +29,6 @@ function RecipeMenu() {
         setFavorites(loadCookies());
 
         // Get all categories
-        // https://jeans-recipe-book.herokuapp.com/api/getCategories
         Axios.get("https://jeans-recipe-book.herokuapp.com/api/getCategories").then((data) => {
             // Convert list of json objects to list of checkbox objects
             let items = [];
@@ -38,7 +37,7 @@ function RecipeMenu() {
                 let item = {
                     label: data.data[i].name,
                     checked: false,
-                    value: data.data[i].id
+                    value: data.data[i].id_categories
                 }
 
                 items.push(item);
@@ -49,7 +48,6 @@ function RecipeMenu() {
 
 
         // Get all recipes
-        // https://jeans-recipe-book.herokuapp.com/api/get
         Axios.get("https://jeans-recipe-book.herokuapp.com/api/get").then((data) => {
             setRecipeList(data.data);
 
@@ -115,7 +113,10 @@ function RecipeMenu() {
                             <CheckBoxGroup 
                                 color="main" 
                                 options={categoryList} 
-                                onChange={(event) => {setCategoriesValue(event.value)}}
+                                onChange={(event) => {
+                                    console.log("Adding " + event.value + " to " + categoriesValue);
+                                    setCategoriesValue(event.value);
+                                }}
                                 style={{visibility: loading ? "hidden" : "visible"}}
                             />
                         </Box>
