@@ -29,6 +29,7 @@ function RecipeMenu() {
         setFavorites(loadCookies());
 
         // Get all categories
+        // https://jeans-recipe-book.herokuapp.com/api/getCategories
         Axios.get("https://jeans-recipe-book.herokuapp.com/api/getCategories").then((data) => {
             // Convert list of json objects to list of checkbox objects
             let items = [];
@@ -48,6 +49,7 @@ function RecipeMenu() {
 
 
         // Get all recipes
+        // https://jeans-recipe-book.herokuapp.com/api/get
         Axios.get("https://jeans-recipe-book.herokuapp.com/api/get").then((data) => {
             setRecipeList(data.data);
 
