@@ -37,7 +37,7 @@ function RecipeMenu() {
                 let item = {
                     label: data.data[i].name,
                     checked: false,
-                    value: data.data[i].id
+                    value: data.data[i].id_categories
                 }
 
                 items.push(item);
@@ -113,7 +113,10 @@ function RecipeMenu() {
                             <CheckBoxGroup 
                                 color="main" 
                                 options={categoryList} 
-                                onChange={(event) => {setCategoriesValue(event.value)}}
+                                onChange={(event) => {
+                                    console.log("Adding " + event.value + " to " + categoriesValue);
+                                    setCategoriesValue(event.value);
+                                }}
                                 style={{visibility: loading ? "hidden" : "visible"}}
                             />
                         </Box>
