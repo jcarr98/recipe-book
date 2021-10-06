@@ -50,7 +50,7 @@ function RecipeCard(props) {
                     primary 
                     color="main" 
                     onClick={() => {history.push('/recipe/' + props.item.id)}}
-                    label="Check Out" 
+                    label="Open" 
                 />
                 {/* Add to favorites */}
                 <Button 
