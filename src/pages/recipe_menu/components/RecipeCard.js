@@ -1,17 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Box, Button, Card, CardHeader, CardBody, CardFooter, Heading } from 'grommet';
 import { BsHeart, BsHeartFill } from 'react-icons/bs';
 
 function RecipeCard(props) {
-    const [el, setel] = useState([]);
+    const [el, setel] = useState("none");
     const history = useHistory();
-
-    useEffect(() => {
-        // Default to no elevation
-        setel("none");
-    }, []);
 
     /** Apply elevation to card on mouse enter */
     function elevate() {
