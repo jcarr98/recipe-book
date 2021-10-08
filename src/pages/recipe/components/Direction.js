@@ -12,7 +12,7 @@ function Direction(props) {
 
     return(
         <Box>
-            <Text>Step {props.stepNum}.</Text>
+            <Text>Step {props.values.step_num}.</Text>
             <CheckBox
                 label={
                     <Text
@@ -21,10 +21,10 @@ function Direction(props) {
                             color: isChecked ? "white" : "gray"
                         }}
                     >
-                        {props.step}
+                        {props.values.step}
                     </Text>
                 }
-                key={props.stepNum}
+                key={props.values.step_num}
                 onChange={() => check()}
                 pad="xsmall"
             />

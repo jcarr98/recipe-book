@@ -14,8 +14,7 @@ function DirectionsList(props) {
 
     useEffect(() => {
         // Load directions
-        let api = "https://jeans-recipe-book.herokuapp.com/api/getDirections/" + props.id;
-        Axios.get(api).then((data) => {
+        Axios.get(`https://jeans-recipe-book.herokuapp.com/api/getDirections/${props.id}`).then((data) => {
             setDirections(data.data);
 
             // Done loading
@@ -31,7 +30,7 @@ function DirectionsList(props) {
                     return(
                         <ul style={{listStyleType: "none"}}>
                             <li key={key}>
-                                <Direction stepNum={val.step_num} step={val.step} />
+                                <Direction key={val.step_num} values={val} />
                             </li>
                         </ul>
                     );
