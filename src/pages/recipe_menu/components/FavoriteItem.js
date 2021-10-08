@@ -18,7 +18,7 @@ function FavoriteItem(props) {
                     secondary
                     plain
                     color="main"
-                    onClick={() => {history.push('/recipe/' + props.id)}}
+                    onClick={() => {history.push(`/recipe/${props.id}`)}}
                     label={props.name}
                 />
             </Box>

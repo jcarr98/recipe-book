@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
 import Axios from 'axios';
-import { Accordion, AccordionPanel, Box, CheckBoxGroup, DropButton, Grid, Heading, Nav, Text, TextInput } from 'grommet';
+import { Accordion, AccordionPanel, Box, Grid, Heading, Nav, Text, TextInput } from 'grommet';
 import { Search } from 'grommet-icons';
 
 // Sub components
 import RecipeCard from './components/RecipeCard';
 import FavoriteItem from './components/FavoriteItem';
+import Categories from './components/Categories';
 // Global components
 import AppBar from '../../components/AppBar';
 import Loading from '../../components/Loading';
@@ -15,7 +16,6 @@ function RecipeMenu() {
     /* States */
     // Constant states
     const [recipeList, setRecipeList] = useState([]);
-    const [categoryList, setCategoryList] = useState([]);
     // Changing states
     const [loading, setLoading] = useState([true]);
     const [searchValue, setSearchValue] = useState([]);
@@ -27,25 +27,6 @@ function RecipeMenu() {
         document.title = "Jean's Recipe Book"
         // Get favorite items
         setFavorites(loadCookies());
-
-        // Get all categories
-        Axios.get("https://jeans-recipe-book.herokuapp.com/api/getCategories").then((data) => {
-            // Convert list of json objects to list of checkbox objects
-            let items = [];
-
-            for(let i = 0; i < data.data.length; i++) {
-                let item = {
-                    label: data.data[i].name,
-                    checked: false,
-                    value: data.data[i].id_categories
-                }
-
-                items.push(item);
-            }
-
-            setCategoryList(items);
-        });
-
 
         // Get all recipes
         Axios.get("https://jeans-recipe-book.herokuapp.com/api/get").then((data) => {
@@ -103,25 +84,7 @@ function RecipeMenu() {
             <AppBar />
             <Heading pad="medium" alignSelf="center">Jean's Recipe Book</Heading>
             <Nav direction="row" align="center" background="main" width="75%" pad="medium" responsive>
-                <DropButton 
-                    color="secondary"
-                    label="Filters"
-                    dropAlign={{top: 'bottom', right: 'right'}}
-                    dropContent={
-                        <Box pad="medium">
-                            {loading ? <Loading text="Loading Categories..." /> : null}
-                            <CheckBoxGroup 
-                                color="main" 
-                                options={categoryList} 
-                                onChange={(event) => {
-                                    console.log("Adding " + event.value + " to " + categoriesValue);
-                                    setCategoriesValue(event.value);
-                                }}
-                                style={{visibility: loading ? "hidden" : "visible"}}
-                            />
-                        </Box>
-                    }
-                />
+                <Categories loading={loading} setCategoriesValue={setCategoriesValue} />
                 <TextInput
                     placeholder="Search"
                     icon={<Search />}
