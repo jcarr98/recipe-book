@@ -11,9 +11,12 @@ export default function Categories(props) {
     const [options, setOptions] = useState([]);
 
     useEffect(() => {
+        // Load categories
         loadCategories();
+
+        // Load cookies
         loadCookies();
-    }, [setOptions]);
+    }, []);
 
     /**
      * Load all categories from database
