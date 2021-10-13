@@ -14,9 +14,16 @@ export default function Categories(props) {
         // Load categories
         loadCategories();
 
-        // Load cookies
-        loadCookies();
-    }, []);
+        // Get cookie
+        let categories = localStorage.getItem('categories');
+        
+        // Check if cookie existed and apply value
+        let val = categories === null ? [] : JSON.parse(categories)
+        
+        // Update variables
+        setValue(val);
+        props.setCategoriesValue(val);
+    }, [setValue, props]);
 
     /**
      * Load all categories from database
@@ -38,21 +45,6 @@ export default function Categories(props) {
 
             setOptions(items);
         });
-    }
-
-    /**
-     * Load the stored category cookie
-     */
-    function loadCookies() {
-        // Get cookie
-        let categories = localStorage.getItem('categories');
-        
-        // Check if cookie existed and apply value
-        let val = categories === null ? [] : JSON.parse(categories)
-        
-        // Update variables
-        setValue(val);
-        props.setCategoriesValue(val);
     }
 
     function updateSelections(newValue) {
