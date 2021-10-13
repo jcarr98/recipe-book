@@ -1,32 +1,32 @@
 import React, { useEffect, useState } from 'react';
 
 import Axios from 'axios';
-import { Accordion, AccordionPanel, Box, Grid, Heading, Nav, Text, TextInput } from 'grommet';
-import { Search } from 'grommet-icons';
+import { Accordion, AccordionPanel, Box, Button, Grid, Heading, Nav, Text, TextInput } from 'grommet';
 
 // Sub components
-import RecipeCard from './components/RecipeCard';
 import FavoriteItem from './components/FavoriteItem';
 import Categories from './components/Categories';
 // Global components
 import AppBar from '../../components/AppBar';
 import Loading from '../../components/Loading';
+import RecipeItem from './components/RecipeItem';
 
-function RecipeMenu() {
+export default function RecipeMenu() {
     /* States */
     // Constant states
     const [recipeList, setRecipeList] = useState([]);
     // Changing states
-    const [loading, setLoading] = useState([true]);
+    const [loading, setLoading] = useState(true);
     const [searchValue, setSearchValue] = useState([]);
     const [categoriesValue, setCategoriesValue] = useState([]);
     const [favorites, setFavorites] = useState([]);
+    const [boxView, setBoxView] = useState(true);
 
     // Load recipes
     useEffect(() => {
         document.title = "Jean's Recipe Book"
-        // Get favorite items
-        setFavorites(loadCookies());
+        // Load all cookies
+        loadCookies();
 
         // Get all recipes
         Axios.get("https://jeans-recipe-book.herokuapp.com/api/get").then((data) => {
@@ -37,9 +37,23 @@ function RecipeMenu() {
     }, []);
 
     function loadCookies() {
+        // Load favorites
         let favs = localStorage.getItem('favorites');
+        setFavorites(favs === null ? [] : JSON.parse(favs));
 
-        return favs === null ? [] : JSON.parse(favs);
+        // Load view
+        let view = localStorage.getItem('view');
+        setBoxView(view === null ? true : JSON.parse(view));
+    }
+
+    function changeView() {
+        let view = !boxView;
+
+        // Change view state
+        setBoxView(view);
+
+        // Save as cookie
+        localStorage.setItem('view', JSON.stringify(view));
     }
 
     const removeFromFavorites = (id) => {
@@ -58,7 +72,6 @@ function RecipeMenu() {
 
         // Update list and cookie
         setFavorites(newFavorites);
-        console.log("Removed favorite: " + id);
         // If no more items in cookie, just remove it
         newFavorites.length === 0 ? localStorage.removeItem('favorites') : localStorage.setItem('favorites', JSON.stringify(newFavorites));
     }
@@ -75,7 +88,6 @@ function RecipeMenu() {
 
         // Update list and cookie
         setFavorites(newFavorites);
-        console.log("New favorite: " + id);
         localStorage.setItem('favorites', JSON.stringify(newFavorites));
     }
 
@@ -87,11 +99,10 @@ function RecipeMenu() {
                 <Categories loading={loading} setCategoriesValue={setCategoriesValue} />
                 <TextInput
                     placeholder="Search"
-                    icon={<Search />}
-                    reverse
                     onChange={event => setSearchValue(event.target.value)}
                     a11yTitle="A search box to filter shown recipes"
                 />
+                <Button color="secondary" label="Change View" onClick={changeView} />
             </Nav>
             <Accordion width="70%">
                 <AccordionPanel label="Favorites">
@@ -115,21 +126,27 @@ function RecipeMenu() {
 
             {loading ? <Loading text="Loading Recipes..." /> : null}
             <Grid width="full" gap="medium" pad="medium" columns={{ count: 'fit', size: "medium"}} style={{visibility: loading ? "hidden" : "visible"}}>
-                {recipeList.filter(function(val,key) {
-                    // Clause checks if no filter is applied
-                    if(categoriesValue.length === 0) {
-                        return true;
-                    } else {
-                        return categoriesValue.includes(val.category);
-                    }
-                }).filter(function(val,key) {
-                    return(val.name.toLowerCase().indexOf(searchValue) > -1 ? true : false);
-                }).map((val,key) => {
-                    return(<RecipeCard key={val.id} item={val} favorites={favorites} add={addToFavorites} remove={removeFromFavorites} />);
-                })}
+            {recipeList.filter(function(val,key) {
+                // Clause checks if no filter is applied
+                if(categoriesValue.length === 0) {
+                    return true;
+                } else {
+                    return categoriesValue.includes(val.category);
+                }
+            }).filter(function(val,key) {
+                return(val.name.toLowerCase().indexOf(searchValue) > -1 ? true : false);
+            }).map((val,key) => {
+                return(
+                    <RecipeItem 
+                        view={boxView}
+                        item={val}
+                        favorited={favorites.includes(val.id)}
+                        add={addToFavorites}
+                        remove={removeFromFavorites}
+                    />
+                );
+            })}
             </Grid>
         </Box>
     );
 }
-
-export default RecipeMenu;
