@@ -44,9 +44,8 @@ export default function Categories(props) {
         //         items.push(item);
         //     }
 
-        //     setOptions(items);
-        // });
-        console.log("contacting database");
+            setOptions(items);
+        });
     }
 
     function updateSelections(newValue) {
