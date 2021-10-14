@@ -10,6 +10,7 @@ import Categories from './components/Categories';
 import AppBar from '../../components/AppBar';
 import Loading from '../../components/Loading';
 import RecipeItem from './components/RecipeItem';
+import ServerError from '../../components/ServerError';
 
 export default function RecipeMenu() {
     /* States */
@@ -21,6 +22,7 @@ export default function RecipeMenu() {
     const [categoriesValue, setCategoriesValue] = useState([]);
     const [favorites, setFavorites] = useState([]);
     const [boxView, setBoxView] = useState(true);
+    const [error, setError] = useState(true);
 
     // Load recipes
     useEffect(() => {
@@ -33,8 +35,11 @@ export default function RecipeMenu() {
             setRecipeList(data.data);
 
             setLoading(false);
+            if(recipeList.length > 0) {
+                setError(false);
+            }
         });
-    }, []);
+    }, [recipeList]);
 
     function loadCookies() {
         // Load favorites
@@ -107,25 +112,52 @@ export default function RecipeMenu() {
             <Accordion width="70%">
                 <AccordionPanel label="Favorites">
                     {loading ? <Loading text="Loading favorites..." /> : null}
-                    <Box style={{visibility: loading ? "hidden" : "visible"}}>
-                        {favorites.length === 0 ? <Text>No favorites to show</Text> : null}
-                        <ul style={{visibility: favorites.length === 0 ? "hidden" : "visible"}}>
-                            {recipeList.filter(function(val,key) {
-                                return favorites.includes(val.id);
-                            }).map((val,key) => {
-                                return(
-                                    <li key={val.id}>
-                                        <FavoriteItem name={val.name} id={val.id} remove={removeFromFavorites} />
-                                    </li>
-                                )
-                            })}
-                        </ul>
-                    </Box>
+                    {error ? null : (
+                        <Box style={{visibility: loading ? "hidden" : "visible"}}>
+                            {favorites.length === 0 ? <Text>No favorites to show</Text> : null}
+                            <ul style={{visibility: favorites.length === 0 ? "hidden" : "visible"}}>
+                                {recipeList.filter(function(val,key) {
+                                        return favorites.includes(val.id);
+                                    }).map((val,key) => {
+                                        return(
+                                            <li key={val.id}>
+                                                <FavoriteItem name={val.name} id={val.id} remove={removeFromFavorites} />
+                                            </li>
+                                        )
+                                    })
+                                }
+                            </ul>
+                        </Box>
+                    )}
                 </AccordionPanel>
             </Accordion>
 
             {loading ? <Loading text="Loading Recipes..." /> : null}
-            <Grid width="full" gap="medium" pad="medium" columns={{ count: 'fit', size: "medium"}} style={{visibility: loading ? "hidden" : "visible"}}>
+            {error ? <ServerError name="the recipe list" /> : (
+                <Grid width="full" gap="medium" pad="medium" columns={{ count: 'fit', size: "medium"}} style={{visibility: loading ? "hidden" : "visible"}}>
+                    {recipeList.filter(function(val,key) {
+                        // Clause checks if no filter is applied
+                        if(categoriesValue.length === 0) {
+                            return true;
+                        } else {
+                            return categoriesValue.includes(val.category);
+                        }
+                    }).filter(function(val,key) {
+                        return(val.name.toLowerCase().indexOf(searchValue) > -1 ? true : false);
+                    }).map((val,key) => {
+                        return(
+                            <RecipeItem 
+                                view={boxView}
+                                item={val}
+                                favorited={favorites.includes(val.id)}
+                                add={addToFavorites}
+                                remove={removeFromFavorites}
+                            />
+                        );
+                    })}
+                </Grid>
+            )}
+            {/* <Grid width="full" gap="medium" pad="medium" columns={{ count: 'fit', size: "medium"}} style={{visibility: loading ? "hidden" : "visible"}}>
             {recipeList.filter(function(val,key) {
                 // Clause checks if no filter is applied
                 if(categoriesValue.length === 0) {
@@ -146,7 +178,7 @@ export default function RecipeMenu() {
                     />
                 );
             })}
-            </Grid>
+            </Grid> */}
         </Box>
     );
 }

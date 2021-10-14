@@ -12,11 +12,13 @@ import IngredientsList from './components/IngredientsList';
 import AppBar from '../../components/AppBar';
 import Back from '../../components/Back';
 import Loading from '../../components/Loading';
+import ServerError from '../../components/ServerError';
 
 function Recipe() {
-    const [recipeInfo, setRecipeInfo] = useState([]);
+    const [recipeInfo, setRecipeInfo] = useState();
     const [loading, setLoading] = useState([]);
     const [activeIndex, setActiveIndex] = useState([0,1]);
+    const [error, setError] = useState(true);
 
     const pathname = window.location.pathname.split('/');
     const id = pathname[pathname.length-1];
@@ -34,6 +36,10 @@ function Recipe() {
             // Set title here since setting states is async and we want title immediately
             document.title = "Jean's Recipe Book - " + data.data[0].name;
             setLoading(false);
+
+            if(recipeInfo !== null) {
+                setError(false);
+            }
         });
     }, [id]);
 
@@ -50,29 +56,31 @@ function Recipe() {
             </Box>
             
             {loading ? <Loading text="Loading Recipe..." /> : null}
-            <Box align="center" style={{visibility: loading ? "hidden" : "visible"}}>
-                <h1>{recipeInfo.name}</h1>
+            {error ? <ServerError name="the directions" /> : (
+                <Box align="center" style={{visibility: loading ? "hidden" : "visible"}}>
+                    <h1>{recipeInfo.name}</h1>
 
-                {/* Favorite Item */}
-                <FavoriteButton info={recipeInfo} />
+                    {/* Favorite Item */}
+                    <FavoriteButton info={recipeInfo} />
 
-                {/* Accordion holding both ingredients list and steps */}
-                <Accordion 
-                    multiple={true} 
-                    activeIndex={activeIndex}
-                    onActive={newActiveIndex => setActiveIndex(newActiveIndex)}
-                    animate={true}
-                >
-                    {/* Ingredients list */}
-                    <AccordionPanel label="Ingredients" >
-                        <IngredientsList id={id} />
-                    </AccordionPanel>
-                    {/* Directions list */}
-                    <AccordionPanel label="Directions">
-                        <DirectionsList id={id} />
-                    </AccordionPanel>
-                </Accordion>
-            </Box>
+                    {/* Accordion holding both ingredients list and steps */}
+                    <Accordion 
+                        multiple={true} 
+                        activeIndex={activeIndex}
+                        onActive={newActiveIndex => setActiveIndex(newActiveIndex)}
+                        animate={true}
+                    >
+                        {/* Ingredients list */}
+                        <AccordionPanel label="Ingredients" >
+                            <IngredientsList id={id} />
+                        </AccordionPanel>
+                        {/* Directions list */}
+                        <AccordionPanel label="Directions">
+                            <DirectionsList id={id} />
+                        </AccordionPanel>
+                    </Accordion>
+                </Box>
+            )}
         </Box>
     );
 }
