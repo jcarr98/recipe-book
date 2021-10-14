@@ -30,23 +30,21 @@ export default function Categories(props) {
      * Load all categories from database
      */
     function loadCategories() {
-        // Axios.get("https://jeans-recipe-book.herokuapp.com/api/getCategories").then((data) => {
-        //     // Convert list of json objects to list of checkbox objects
-        //     let items = [];
+        Axios.get("https://jeans-recipe-book.herokuapp.com/api/getCategories").then((data) => {
+            // Convert list of json objects to list of checkbox objects
+            let items = [];
 
-        //     for(let i = 0; i < data.data.length; i++) {
-        //         let current = data.data[i];
-        //         let item = {
-        //             label: current.name,
-        //             val: current.id_categories
-        //         }
+            for(let i = 0; i < data.data.length; i++) {
+                let current = data.data[i];
+                let item = {
+                    label: current.name,
+                    val: current.id_categories
+                }
 
-        //         items.push(item);
-        //     }
-
-        //     setOptions(items);
-        // });
-        console.log("contacting database");
+                items.push(item);
+            }
+            setOptions(items);
+        });
     }
 
     function updateSelections(newValue) {
@@ -79,7 +77,6 @@ export default function Categories(props) {
                             options={options}
                             value={value}
                             onChange={(event) => {
-                                console.log("Changing value");
                                 updateSelections(event.value);
                             }}
                         />
