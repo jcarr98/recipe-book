@@ -46,7 +46,6 @@ export default function Categories(props) {
 
             setOptions(items);
         });
-        console.log("contacting database");
     }
 
     function updateSelections(newValue) {
