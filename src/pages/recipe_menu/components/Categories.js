@@ -45,8 +45,6 @@ export default function Categories(props) {
             }
             setOptions(items);
         });
-
-        console.log("contacting database");
     }
 
     function updateSelections(newValue) {
@@ -79,7 +77,6 @@ export default function Categories(props) {
                             options={options}
                             value={value}
                             onChange={(event) => {
-                                console.log("Changing value");
                                 updateSelections(event.value);
                             }}
                         />
