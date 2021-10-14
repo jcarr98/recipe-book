@@ -15,10 +15,10 @@ import Loading from '../../components/Loading';
 import ServerError from '../../components/ServerError';
 
 function Recipe() {
-    const [recipeInfo, setRecipeInfo] = useState();
+    const [recipeInfo, setRecipeInfo] = useState({name: "undefined"});
     const [loading, setLoading] = useState([]);
     const [activeIndex, setActiveIndex] = useState([0,1]);
-    const [error, setError] = useState(true);
+    const [error, setError] = useState(false);
 
     const pathname = window.location.pathname.split('/');
     const id = pathname[pathname.length-1];
@@ -31,15 +31,15 @@ function Recipe() {
         // Load recipe info
         let api = "https://jeans-recipe-book.herokuapp.com/api/get/" + id;
         Axios.get(api).then((data) => {
-            setRecipeInfo(data.data[0]);
-
-            // Set title here since setting states is async and we want title immediately
-            document.title = "Jean's Recipe Book - " + data.data[0].name;
-            setLoading(false);
-
-            if(recipeInfo !== null) {
-                setError(false);
+            if(data.data.length === 0) {
+                setError(true);
+                document.title = "Error";
+            } else {
+                setRecipeInfo(data.data[0]);
+                document.title = "Jean's Recipe Book - " + data.data[0].name;
             }
+
+            setLoading(false);
         });
     }, [id]);
 
