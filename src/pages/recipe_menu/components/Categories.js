@@ -9,6 +9,7 @@ import Loading from '../../../components/Loading';
 export default function Categories(props) {
     const [value, setValue] = useState([]);
     const [options, setOptions] = useState([]);
+    const parentValues = props.setCategoriesValue;
 
     useEffect(() => {
         // Load categories
@@ -22,8 +23,8 @@ export default function Categories(props) {
         
         // Update variables
         setValue(val);
-        props.setCategoriesValue(val);
-    }, [setValue, props]);
+        parentValues(val);
+    }, [parentValues]);
 
     /**
      * Load all categories from database
@@ -45,6 +46,7 @@ export default function Categories(props) {
 
             setOptions(items);
         });
+        console.log("contacting database");
     }
 
     function updateSelections(newValue) {
@@ -59,7 +61,7 @@ export default function Categories(props) {
         setValue(newValue);
 
         // Update list
-        props.setCategoriesValue(newValue);
+        parentValues(newValue);
     }
     
     return(
