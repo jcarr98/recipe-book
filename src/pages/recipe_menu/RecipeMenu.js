@@ -22,7 +22,7 @@ export default function RecipeMenu() {
     const [categoriesValue, setCategoriesValue] = useState([]);
     const [favorites, setFavorites] = useState([]);
     const [boxView, setBoxView] = useState(true);
-    const [error, setError] = useState(true);
+    const [error, setError] = useState(false);
 
     // Load recipes
     useEffect(() => {
@@ -32,12 +32,13 @@ export default function RecipeMenu() {
 
         // Get all recipes
         Axios.get("https://jeans-recipe-book.herokuapp.com/api/get").then((data) => {
-            setRecipeList(data.data);
+            if(data.data.length === 0) {
+                setError(true);
+            } else {
+                setRecipeList(data.data);
+            }
 
             setLoading(false);
-            if(recipeList.length > 0) {
-                setError(false);
-            }
         });
     }, [recipeList]);
 
@@ -157,28 +158,6 @@ export default function RecipeMenu() {
                     })}
                 </Grid>
             )}
-            {/* <Grid width="full" gap="medium" pad="medium" columns={{ count: 'fit', size: "medium"}} style={{visibility: loading ? "hidden" : "visible"}}>
-            {recipeList.filter(function(val,key) {
-                // Clause checks if no filter is applied
-                if(categoriesValue.length === 0) {
-                    return true;
-                } else {
-                    return categoriesValue.includes(val.category);
-                }
-            }).filter(function(val,key) {
-                return(val.name.toLowerCase().indexOf(searchValue) > -1 ? true : false);
-            }).map((val,key) => {
-                return(
-                    <RecipeItem 
-                        view={boxView}
-                        item={val}
-                        favorited={favorites.includes(val.id)}
-                        add={addToFavorites}
-                        remove={removeFromFavorites}
-                    />
-                );
-            })}
-            </Grid> */}
         </Box>
     );
 }
