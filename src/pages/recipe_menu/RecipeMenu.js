@@ -40,7 +40,7 @@ export default function RecipeMenu() {
 
             setLoading(false);
         });
-    }, [recipeList]);
+    }, []);
 
     function loadCookies() {
         // Load favorites
