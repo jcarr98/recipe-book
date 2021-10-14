@@ -56,7 +56,7 @@ function Recipe() {
             </Box>
             
             {loading ? <Loading text="Loading Recipe..." /> : null}
-            {error ? <ServerError name="the directions" /> : (
+            {error ? <ServerError name="this recipe" /> : (
                 <Box align="center" style={{visibility: loading ? "hidden" : "visible"}}>
                     <h1>{recipeInfo.name}</h1>
 
