@@ -14,7 +14,7 @@ function DirectionsList(props) {
 
     useEffect(() => {
         // Load directions
-        let api = process.env.REACT_APP_BACKEND + "getDirections" + props.id;
+        let api = process.env.REACT_APP_BACKEND + "getDirections/" + props.id;
         Axios.get(api).then((data) => {
             setDirections(data.data);
 
