@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 
 import Axios from 'axios';
 
+import { Box, Button, Card, CardBody, CardFooter, CardHeader } from 'grommet';
+
 import AppBar from '../../components/AppBar';
 
 export default function Create(props) {
@@ -14,8 +16,14 @@ export default function Create(props) {
     } ,[]);
 
     return(
-        <div>
+        <Box align="center">
             <AppBar authenticated={true} />
-        </div>
+
+            <Box>
+                <h1>New Recipe</h1>
+            </Box>
+
+            
+        </Box>
     );
 }
