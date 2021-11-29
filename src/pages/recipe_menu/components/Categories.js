@@ -30,7 +30,8 @@ export default function Categories(props) {
      * Load all categories from database
      */
     function loadCategories() {
-        Axios.get("https://jeans-recipe-book.herokuapp.com/api/getCategories").then((data) => {
+        let api = process.env.REACT_APP_BACKEND + "getCategories";
+        Axios.get(api).then((data) => {
             // Convert list of json objects to list of checkbox objects
             let items = [];
 

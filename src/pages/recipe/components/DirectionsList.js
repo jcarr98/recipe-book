@@ -14,7 +14,8 @@ function DirectionsList(props) {
 
     useEffect(() => {
         // Load directions
-        Axios.get(`https://jeans-recipe-book.herokuapp.com/api/getDirections/${props.id}`).then((data) => {
+        let api = process.env.REACT_APP_BACKEND + "getDirections" + props.id;
+        Axios.get(api).then((data) => {
             setDirections(data.data);
 
             // Done loading

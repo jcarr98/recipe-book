@@ -31,7 +31,8 @@ export default function RecipeMenu() {
         loadCookies();
 
         // Get all recipes
-        Axios.get("https://jeans-recipe-book.herokuapp.com/api/get").then((data) => {
+        let api = process.env.REACT_APP_BACKEND + "get";
+        Axios.get(api).then((data) => {
             if(data.data.length === 0) {
                 setError(true);
             } else {

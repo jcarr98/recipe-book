@@ -29,7 +29,7 @@ function Recipe() {
         setLoading(true);
 
         // Load recipe info
-        let api = "https://jeans-recipe-book.herokuapp.com/api/get/" + id;
+        let api = process.env.REACT_APP_BACKEND + "get/" + id;
         Axios.get(api).then((data) => {
             if(data.data.length === 0) {
                 setError(true);
