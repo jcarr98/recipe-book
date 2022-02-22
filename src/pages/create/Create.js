@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import Axios from 'axios';
 
-import { Box, Button, Text, TextArea, TextInput } from 'grommet';
+import { Box, Button, RadioButtonGroup, Text, TextArea, TextInput } from 'grommet';
 
 import AppBar from '../../components/AppBar';
 import IngredientsManager from './components/IngredientsManager';
@@ -11,24 +11,37 @@ import DirectionsManager from './components/DirectionsManager';
 export default function Create() {
     const [ingredients, setIngredients] = useState([]);  // List of all entered ingredients
     const [directions, setDirections] = useState([]);  // List of all directions
+    const [categories, setCategories] = useState([]);
+    const [cNames, setCNames] = useState([]);
 
     useEffect(() => {
+        // Check user is authenticated
         let api = process.env.REACT_APP_BACKEND + "auth/authenticated";
         Axios.get(api, { withCredentials: true }).then((data) => {
             if(!data.data) {
                 window.location = '/login';
             }
         });
+
+        // Get all categories
+        api = process.env.REACT_APP_BACKEND + "getCategories";
+        Axios.get(api).then((data) => {
+            let names = [];
+            for(let i = 0; i < data.data.length; i++) {
+                names.push(data.data[i].name);
+            }
+
+            // TODO - Create radio friendly objects (label/value)
+            setCNames(names);
+            setCategories(data.data);
+        })
     } ,[]);
 
     function send() {
         console.log("Sent data");
 
-        console.log("List of all ingredients:");
-        console.log(ingredients);
-
-        console.log("List of all steps:");
-        console.log(directions);
+        let api = process.env.REACT_APP_BACKEND + "createRecipe";
+        Axios.post(api, ingredients);
     }
 
     return(
@@ -57,6 +70,14 @@ export default function Create() {
                     />
                 </Box>
             </Box>
+            <Box align="center">
+                <h2>Category</h2>
+                <RadioButtonGroup 
+                    name="cat" 
+                    options={categories}
+                    onChange={(event) => {console.log(event.target.value)}}
+                    />
+            </Box>
 
             {/* Ingredients table */}
             <Box pad="medium">
@@ -75,6 +96,14 @@ export default function Create() {
                 directions={directions}
                 setDirections={setDirections}
             />
+
+            <Box>
+                <ol>
+                    {categories.map((item) => {
+                        <li>{item.name}</li>
+                    })}
+                </ol>
+            </Box>
 
             <Box pad="large">
                 <Button 
