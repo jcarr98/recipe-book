@@ -1,99 +1,84 @@
-import { useEffect, useState } from 'react';
-import Axios from 'axios';
+import StepTable from "./StepTable";
 
-import { Box, Button, Table, TableBody, TableCell, TableHeader, TableRow, Text, TextInput } from 'grommet';
-import { Trash } from 'grommet-icons';
+import { Box } from 'grommet';
 
 export default function IngredientsManager(props) {
-    const [allIngredients, setAllIngredients] = useState();
-    const [ingredients, setIngredients] = useState([]);
-    
-    useEffect(() => {
-        // Load existing ingredients
-        let api = process.env.REACT_APP_BACKEND + "getIngredients";
-        Axios.get(api).then((data) => {
-            // Add all ingredients names to an array
-            let ing = [];
-            for(let i = 0; i < data.data.length; i++) {
-                ing.push(data.data[i].name);
+    /** Verifies inputs before adding to full list of ingredients
+     * 
+     * @returns true if successful, false if not
+     */
+    function addIngredient(vals) {
+        let ingredient = {
+            name: "",
+            amount: "",
+            style: ""
+        };
+        
+        // Check a name was provided
+        if(vals[0].length < 1) {
+            alert("You must provide a name");
+            return false;
+        }
+        // Check ingredient doesn't already exist and save the name
+        if(getIngredientIndex(vals[0]) >= 0) {
+            alert("Item already exists");
+            return false;
+        }
+
+        ingredient.name = vals[0];
+        ingredient.amount = vals[1];
+        ingredient.style = vals[2];
+
+        // Add new ingredient to full list
+        let newIngredients = [...props.ingredients, ingredient];
+        // Update list in higher level element
+        props.setIngredients(newIngredients);
+
+        return true;
+    }
+
+    function removeIngredient(item) {
+        // Find index of deleted item
+        let index = getIngredientIndex(item[0]);
+
+        // Check item exists
+        if(index < 0) {
+            alert("Item does not exist");
+            return false;
+        }
+
+        // Update ingredients list
+        let newArr = [...props.ingredients];
+        newArr.splice(index, 1);
+        props.setIngredients(newArr);
+
+        return true;
+    }
+
+    /** Gets index of named ingredient
+     * @returns the index of the ingredient, -1 if not in list
+     */
+    function getIngredientIndex(name) {
+        for(let i = 0; i < props.ingredients.length; i++) {
+            if(props.ingredients[i].name === name) {
+                return i;
             }
+        }
 
-            // Save ingredient names as state
-            setAllIngredients(ing);
-        });
-    }, []);
-
-    function addItem(name) {
-
+        return -1;
     }
 
-    function blankItem() {
-        // Add blank item to list 
-        let ing = [...ingredients];
-        ing.push("");
-        setIngredients(ing);
-    }
-
-    function remove(name) {
-        props.removeIngredient(name);
-    }
-
-    return (
-        <Box>
-            <Table align="center">
-                <TableHeader align="center">
-                    <TableCell scope="col" border="bottom" key="name">
-                        <Text weight="bold">Ingredient*</Text>
-                    </TableCell>
-                    <TableCell scope="col" border="bottom" key="amount">
-                        <Text weight="bold">Amount</Text>
-                    </TableCell>
-                    <TableCell scope="col" border="bottom" key="prep">
-                        <Text weight="bold">Preparation</Text>
-                    </TableCell>
-                    <TableCell scope="col" border="bottom" key="del">
-                    </TableCell>
-                </TableHeader>
-                <TableBody>
-                    {ingredients.map((val) => {
-                        return(
-                            <TableRow key={val}>
-                                <TableCell scope="row" border="bottom" key={`${val}:A`}>
-                                    <TextInput value={val} disabled={val.length > 0} />
-                                </TableCell>
-                                <TableCell scope="row" border="bottom" key={`${val}:B`}>
-                                    <TextInput value={val} disabled={val.length > 0} />
-                                </TableCell>
-                                <TableCell scope="row" border="bottom" key={`${val}:C`}>
-                                    <TextInput value={val} disabled={val.length > 0} />
-                                </TableCell>
-                                <TableCell scope="row" border="bottom" key={`${val}:D`}>
-                                    <Button 
-                                        icon={<Trash />} 
-                                        onClick={() => remove(val)} />
-                                </TableCell>
-                            </TableRow>
-                        );
-                    })}
-                    <TableRow key="empty">
-                        <TableCell scope="row" border="bottom" key="empty:A">
-                            <TextInput />
-                        </TableCell>
-                        <TableCell scope="row" border="bottom" key="empty:B">
-                            <TextInput />
-                        </TableCell>
-                        <TableCell scope="row" border="bottom" key="empty:C">
-                            <TextInput />
-                        </TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table>
-
-            <Button 
-                primary 
-                color="main" 
-                label="Add Ingredient"
-                onClick={() => blankItem()}
+    return(
+        <Box width="95%">
+            <StepTable
+                numCols={3}
+                headers={[
+                    "Name",
+                    "Amount",
+                    "Style"
+                ]}
+                addItemExternally={addIngredient}
+                removeItemExternally={removeIngredient}
             />
         </Box>
     );
