@@ -5,13 +5,21 @@ import { Box } from 'grommet';
 export default function DirectionsManager(props) {
     function addDirection(vals) {
         // Check the direction has at least one character
-        if(vals[0].length < 1) {
+        if(vals.step < 1) {
             alert("Direction must be at least one character");
             return false;
         }
 
+        // Create new direction object
+        let direction = {
+            step: vals[0],
+            step_num: props.directions.length + 1,
+            optional: vals["optional"]
+        }
+
         // Add new direction to full list
-        let newDirs = [...props.directions, vals[0]];
+        let newDirs = [...props.directions, direction];
+        console.log(newDirs);
         props.setDirections(newDirs);
 
         return true;
@@ -36,7 +44,7 @@ export default function DirectionsManager(props) {
 
     function getDirectionIndex(item) {
         for(let i = 0; i < props.directions.length; i++) {
-            if(props.directions[i] === item) {
+            if(props.directions[i].step === item) {
                 return i;
             }
         }

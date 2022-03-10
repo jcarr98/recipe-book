@@ -11,7 +11,8 @@ export default function IngredientsManager(props) {
         let ingredient = {
             name: "",
             amount: "",
-            style: ""
+            style: "",
+            optional: false
         };
         
         // Check a name was provided
@@ -28,6 +29,7 @@ export default function IngredientsManager(props) {
         ingredient.name = vals[0];
         ingredient.amount = vals[1];
         ingredient.style = vals[2];
+        ingredient.optional = vals["optional"];
 
         // Add new ingredient to full list
         let newIngredients = [...props.ingredients, ingredient];

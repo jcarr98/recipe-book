@@ -21,7 +21,7 @@ function Direction(props) {
                             color: isChecked ? "white" : "gray"
                         }}
                     >
-                        {props.values.step}
+                        {props.values.step} {props.values.optional ? " (optional)" : ''}
                     </Text>
                 }
                 key={props.values.step_num}
