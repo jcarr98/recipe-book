@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import RecipeMenu from './pages/recipe_menu/RecipeMenu';
 import Recipe from './pages/recipe/Recipe';
-import Create from './pages/create/Create';
 import Dashboard from './pages/dashboard/Dashboard';
 import Oops from './pages/Oops';
 
@@ -23,7 +22,6 @@ function App() {
                 <Route path="/recipe/:id" component={Recipe} />
                 <Route path="/login" component={Login} />
                 <Route path="/dashboard" component={Dashboard} />
-                <Route path="/create" component={Create} />
                 <Route component={Oops} />
             </Switch>
         </Router>
