@@ -21,16 +21,8 @@ export default function Create(props) {
 
     useEffect(() => {
         console.log("Running");
-        // Check user is authenticated
-        let api = process.env.REACT_APP_BACKEND + "auth/authenticated";
-        Axios.get(api, { withCredentials: true }).then((data) => {
-            if(!data.data) {
-                window.location = '/login';
-            }
-        });
-
         // Get all categories
-        api = process.env.REACT_APP_BACKEND + "getCategories";
+        let api = process.env.REACT_APP_BACKEND + "getCategories";
         Axios.get(api).then((data) => {
             let cats = [];
             for(let i = 0; i < data.data.length; i++) {

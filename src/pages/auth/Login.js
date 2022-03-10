@@ -27,6 +27,7 @@ export default function Login(props) {
 
     function onFailure(res) {
         console.log(`[Login failed] Response: ${res}`);
+        console.log(res);
     }
     
     return(
