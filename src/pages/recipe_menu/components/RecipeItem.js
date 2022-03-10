@@ -29,7 +29,7 @@ export default function RecipeItem(props) {
             >
                 <CardHeader size="small" width="full" round>
                     <Box width="full" align="center">
-                        <Heading level="3" weight="bold">{props.item.name}</Heading>
+                        <Heading level="3" weight="bold" align="center">{props.item.name}</Heading>
                     </Box>
                 </CardHeader>
                 <CardBody pad="small">{props.item.details}</CardBody>
