@@ -7,7 +7,6 @@ import { Accordion, AccordionPanel, Box, Button, Grid, Heading, Nav, Text, TextI
 import FavoriteItem from './components/FavoriteItem';
 import Categories from './components/Categories';
 // Global components
-import AppBar from '../../components/AppBar';
 import Loading from '../../components/Loading';
 import RecipeItem from './components/RecipeItem';
 import ServerError from '../../components/ServerError';
@@ -100,7 +99,6 @@ export default function RecipeMenu() {
 
     return (
         <Box align="center" full responsive>
-            <AppBar />
             <Heading pad="medium" alignSelf="center">Jean's Recipe Book</Heading>
             <Nav direction="row" align="center" background="main" width="75%" pad="medium" responsive>
                 <Categories loading={loading} setCategoriesValue={setCategoriesValue} />

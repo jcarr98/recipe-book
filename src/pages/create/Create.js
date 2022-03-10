@@ -4,12 +4,12 @@ import Axios from 'axios';
 
 import { Box, Button, RadioButtonGroup, Text, TextArea, TextInput } from 'grommet';
 
-import AppBar from '../../components/AppBar';
 import IngredientsManager from './components/IngredientsManager';
 import DirectionsManager from './components/DirectionsManager';
 import Loading from '../../components/Loading';
+import Login from '../auth/Login';
 
-export default function Create() {
+export default function Create(props) {
     const [loading, setLoading] = useState(true);
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -53,6 +53,10 @@ export default function Create() {
         })
     } ,[]);
 
+    if(!props.token) {
+        return <Login setToken={props.setToken} />
+    }
+
     /**
      * Send all recipe data to database
      * @returns true if successful, false if not
@@ -62,7 +66,8 @@ export default function Create() {
 
         console.log(category);
         // Check category only contains letters
-        if(category === '0' && !/^[a-z]+$/i.test(customCat)) {
+        let nospaces = customCat.replace(" ", "");
+        if(category === '0' && !/^[a-z]+$/i.test(nospaces)) {
             alert("New category names can only contain letters");
             return;
         }
@@ -127,8 +132,6 @@ export default function Create() {
 
     return(
         <Box align="center" responsive>
-            <AppBar authenticated={true} />
-
             <Box pad="medium">
                 <h1>New Recipe</h1>
             </Box>
