@@ -22,7 +22,8 @@ function IngredientsList(props) {
                     uid: data.data[i].id_rIngredients,
                     name: data.data[i].name,
                     amount: data.data[i].amount,
-                    style: data.data[i].style
+                    style: data.data[i].style,
+                    optional: data.data[i].optional
                 };
 
                 items.push(item);
@@ -59,6 +60,7 @@ function IngredientsList(props) {
                                 <TableRow key={val.uid}>
                                     <TableCell scope="row" border="bottom" key={`${key}:A`}>
                                         <Text>{val.name}</Text>
+                                        <Text> {val.optional === 1 ? "(optional)" : ''}</Text>
                                     </TableCell>
                                     <TableCell scope="row" border="left right" key={`${key}:B`}>
                                         <Text>{val.amount}</Text>

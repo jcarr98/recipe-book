@@ -9,7 +9,6 @@ import WakeLock from './components/WakeLock';
 import DirectionsList from './components/DirectionsList';
 import IngredientsList from './components/IngredientsList';
 // Global components
-import AppBar from '../../components/AppBar';
 import Back from '../../components/Back';
 import Loading from '../../components/Loading';
 import ServerError from '../../components/ServerError';
@@ -45,8 +44,6 @@ function Recipe() {
 
     return(
         <Box align="center" full responsive>
-            <AppBar />
-
             <Box direction="row" fill>
                 {/* Back to recipe list */}
                 <Back route="/" label="Back to Recipe List" />
