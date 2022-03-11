@@ -1,12 +1,10 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 
 import { Anchor, Box, Button, Header, Menu, Text } from 'grommet';
 import { Apps, Home } from 'grommet-icons';
 import { useGoogleLogout } from 'react-google-login';
 
 function AppBar(props) {
-    const history = useHistory();
     const clientId = process.env.REACT_APP_OAUTH_CLIENT_ID;
 
     const { signOut } = useGoogleLogout({
@@ -32,7 +30,7 @@ function AppBar(props) {
         style={{ position: "sticky", top: "0", zIndex: "1" }}
         responsive
         >
-            <Anchor onClick={() => history.push('/')} color="mainText">
+            <Anchor onClick={() => window.location.href = 'https://www.recipe.jeffreycarr.dev/'} color="mainText">
                 <Home />
             </Anchor>
             <Box direction="row">
@@ -58,8 +56,8 @@ function AppBar(props) {
                     left: "left"
                 }}
                 items={[
-                    {label: "Main Website", onClick: () => {window.location.href = "https://agitated-stonebraker-b885ec.netlify.app/"}},
-                    {label: "Recipe Book", onClick: () => {history.push('/')}}
+                    {label: "Main Website", onClick: () => {window.location.href = "https://www.jeffreycarr.dev"}},
+                    {label: "Recipe Book", onClick: () => {window.location.href = 'https://www.recipe.jeffreycarr.dev'}}
                 ]}
             >
                 <Box direction="column" align="center">
