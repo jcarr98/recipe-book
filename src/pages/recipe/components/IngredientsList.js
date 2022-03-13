@@ -19,7 +19,7 @@ function IngredientsList(props) {
 
             for(let i = 0; i < data.data.length; i++) {
                 let item = {
-                    uid: data.data[i].id_rIngredients,
+                    uid: data.data[i].id,
                     name: data.data[i].name,
                     amount: data.data[i].amount,
                     style: data.data[i].style,
@@ -28,6 +28,8 @@ function IngredientsList(props) {
 
                 items.push(item);
             }
+
+            console.log(items);
 
             setIngredients(items);
             setLoading(false);
