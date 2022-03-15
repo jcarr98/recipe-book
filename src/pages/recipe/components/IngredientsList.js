@@ -13,8 +13,7 @@ function IngredientsList(props) {
     // Load ingredients
     useEffect(() => {
         // Load ingredients
-        let api = process.env.REACT_APP_BACKEND + "getIngredients/" + props.id;
-        Axios.get(api).then((data) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND}/getIngredients/${props.id}`).then((data) => {
             let items = [];
 
             for(let i = 0; i < data.data.length; i++) {
@@ -28,8 +27,6 @@ function IngredientsList(props) {
 
                 items.push(item);
             }
-
-            console.log(items);
 
             setIngredients(items);
             setLoading(false);

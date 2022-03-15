@@ -30,8 +30,7 @@ export default function Categories(props) {
      * Load all categories from database
      */
     function loadCategories() {
-        let api = process.env.REACT_APP_BACKEND + "getCategories";
-        Axios.get(api).then((data) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND}/getCategories`).then((data) => {
             // Convert list of json objects to list of checkbox objects
             let items = [];
 

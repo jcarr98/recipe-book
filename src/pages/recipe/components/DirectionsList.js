@@ -14,8 +14,7 @@ function DirectionsList(props) {
 
     useEffect(() => {
         // Load directions
-        let api = process.env.REACT_APP_BACKEND + "getDirections/" + props.id;
-        Axios.get(api).then((data) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND}/getDirections/${props.id}`).then((data) => {
             setDirections(data.data);
 
             // Done loading
@@ -27,15 +26,15 @@ function DirectionsList(props) {
         <Box>
             {/* Maps directions to a list. Directions are checkboxes */}
             {loading ? <Loading text="Loading directions..." /> : (
-                directions.map((val,key) => {
-                    return(
-                        <ul style={{listStyleType: "none"}}>
+                <ul style={{listStyleType: "none"}}>
+                    {directions.map((val,key) => {
+                        return(
                             <li key={key}>
                                 <Direction key={val.step_num} values={val} />
                             </li>
-                        </ul>
-                    );
-                })
+                        );
+                    })}
+                </ul>
             )}
         </Box>
     )

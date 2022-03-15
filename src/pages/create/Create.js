@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Redirect } from 'react-router-dom';
 
 import Axios from 'axios';
 
@@ -7,10 +8,10 @@ import { Box, Button, RadioButtonGroup, Text, TextArea, TextInput } from 'gromme
 import IngredientsManager from './components/IngredientsManager';
 import DirectionsManager from './components/DirectionsManager';
 import Loading from '../../components/Loading';
-import Login from '../auth/Login';
 
-export default function Create(props) {
+export default function Create() {
     const [loading, setLoading] = useState(true);
+    const [loggedIn, setLoggedIn] = useState(null);
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [category, setCategory] = useState(-1);
@@ -20,10 +21,8 @@ export default function Create(props) {
     const [customCat, setCustomCat] = useState("");
 
     useEffect(() => {
-        console.log("Running");
         // Get all categories
-        let api = process.env.REACT_APP_BACKEND + "getCategories";
-        Axios.get(api).then((data) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND}/getCategories`).then((data) => {
             let cats = [];
             for(let i = 0; i < data.data.length; i++) {
                 let obj = {
@@ -43,20 +42,27 @@ export default function Create(props) {
             setCategories(cats);
             setLoading(false);
         })
-    } ,[]);
 
-    if(!props.token) {
-        return <Login setToken={props.setToken} />
-    }
+        // Check auth
+        const authToken = localStorage.getItem('authToken');
+        if(authToken !== null) {
+            Axios.get(`${process.env.REACT_APP_BACKEND}/auth/validUser`, {params: {tokenId: authToken}}).then((res) => {
+                if(res.data) {
+                    setLoggedIn(true);
+                } else {
+                    setLoggedIn(false);
+                }
+            });
+        } else {
+            setLoggedIn(false);
+        }
+    } ,[]);
 
     /**
      * Send all recipe data to database
      * @returns true if successful, false if not
      */
     function send() {
-        console.log("Sending data");
-
-        console.log(category);
         // Check category only contains letters
         let nospaces = customCat.replace(" ", "");
         if(category === '0' && !/^[a-z]+$/i.test(nospaces)) {
@@ -93,17 +99,14 @@ export default function Create(props) {
         }
 
         // Create api string and send recipe object to backend
-        let api = process.env.REACT_APP_BACKEND + "createRecipe";
-        Axios.post(api, recipe).then(response => {
+        Axios.post(`${process.env.REACT_APP_BACKEND}/createRecipe`, {data: {recipe: recipe, token: localStorage.getItem('authToken')}}).then(response => {
             if(response.data.status < 0) {
                 alert(response.data.message);
             } else {
-                console.log(response.data.message);
+                window.location.href = '/';
             }
         });
 
-        console.log(`Sent ${recipe.name}`);
-        console.log("Data sent");
         return true;
     }
 
@@ -124,102 +127,115 @@ export default function Create(props) {
 
     return(
         <Box align="center" responsive>
-            <Box pad="medium">
-                <h1>New Recipe</h1>
-            </Box>
+            {loggedIn === null ?
+                <Loading text={"Checking permissions..."} />
+                :
+                loggedIn ?
+                    <Box align="center" responsive>
+                        <Box pad="medium">
+                            <h1>New Recipe</h1>
+                        </Box>
 
-            {/* Recipe name */}
-            <Box direction="row" align="center">
-                <Box align="end" pad="small">
-                    <Text>Recipe Name: </Text>
-                </Box>
-                <Box align="start" pad="small">
-                    <TextInput 
-                        name="name" 
-                        placeholder="Sample recipe name"
-                        value={name}
-                        onChange={event => setName(event.target.value)}
-                    />
-                </Box>
-            </Box>
-
-            {/* Recipe description */}
-            <Box direction="row" align="center">
-                <Box align="end" pad="small">
-                    <Text>Recipe Description: </Text>
-                </Box>
-                <Box align="start" pad="small">
-                    <TextArea
-                        placeholder="Sample Description"
-                        value={description}
-                        onChange={event => setDescription(event.target.value)}
-                    />
-                </Box>
-            </Box>
-
-            {/* Recipe category */}
-            <h2>Category</h2>
-            {loading ? <Loading text={"Loading Categories..."} />: (
-                <Box align="center">
-                    <Box>
-                        <RadioButtonGroup 
-                            name="cat"
-                            options={categories}
-                            onChange={event => setCategory(event.target.value)}
-                        />
-                    </Box>
-                    <Box pad="small">
+                        {/* Recipe name */}
                         <Box direction="row" align="center">
-                            <Box pad="small">
-                                <Text>Category: </Text>
+                            <Box align="end" pad="small">
+                                <Text>Recipe Name: </Text>
                             </Box>
-                            <Box>
-                                <TextInput value={customCat} onChange={event => setCustomCat(event.target.value)} />
+                            <Box align="start" pad="small">
+                                <TextInput 
+                                    name="name" 
+                                    placeholder="Sample recipe name"
+                                    value={name}
+                                    onChange={event => setName(event.target.value)}
+                                />
                             </Box>
                         </Box>
+
+                        {/* Recipe description */}
+                        <Box direction="row" align="center">
+                            <Box align="end" pad="small">
+                                <Text>Recipe Description: </Text>
+                            </Box>
+                            <Box align="start" pad="small">
+                                <TextArea
+                                    placeholder="Sample Description"
+                                    value={description}
+                                    onChange={event => setDescription(event.target.value)}
+                                />
+                            </Box>
+                        </Box>
+
+                        {/* Recipe category */}
+                        <h2>Category</h2>
+                        {loading ? <Loading text={"Loading Categories..."} />: (
+                            <Box align="center">
+                                <Box>
+                                    <RadioButtonGroup 
+                                        name="cat"
+                                        options={categories}
+                                        onChange={event => setCategory(event.target.value)}
+                                    />
+                                </Box>
+                                <Box pad="small">
+                                    <Box direction="row" align="center">
+                                        <Box pad="small">
+                                            <Text>Category: </Text>
+                                        </Box>
+                                        <Box>
+                                            <TextInput value={customCat} onChange={event => setCustomCat(event.target.value)} />
+                                        </Box>
+                                    </Box>
+                                </Box>
+                            </Box>
+                            )}
+                        
+
+                        {/* Ingredients table */}
+                        <Box pad="medium">
+                            <h2>Ingredients</h2>
+                        </Box>
+                        <IngredientsManager
+                            ingredients={ingredients}
+                            setIngredients={setIngredients}
+                        />
+
+                        {/* Directions table */}
+                        <Box pad="medium">
+                            <h2>Directions</h2>
+                        </Box>
+                        <DirectionsManager
+                            directions={directions}
+                            setDirections={setDirections}
+                        />
+
+                        {/* Submit button */}
+                        <Box pad="large">
+                            <Box>
+                                <Button 
+                                    primary 
+                                    color="main"
+                                    onClick={() => send()}
+                                    label="Save to Recipe Book"
+                                />
+                            </Box>
+                            <Box pad="small">
+                                <Button
+                                    secondary
+                                    color="main"
+                                    onClick={() => reset()}
+                                    label="Reset"
+                                />
+                            </Box>
+                            
+                        </Box>
                     </Box>
-                </Box>
-                )}
-            
-
-            {/* Ingredients table */}
-            <Box pad="medium">
-                <h2>Ingredients</h2>
-            </Box>
-            <IngredientsManager
-                ingredients={ingredients}
-                setIngredients={setIngredients}
-            />
-
-            {/* Directions table */}
-            <Box pad="medium">
-                <h2>Directions</h2>
-            </Box>
-            <DirectionsManager
-                directions={directions}
-                setDirections={setDirections}
-            />
-
-            {/* Submit button */}
-            <Box pad="large">
-                <Box>
-                    <Button 
-                        primary 
-                        color="main"
-                        onClick={() => send()}
-                        label="Save to Recipe Book"
-                    />
-                </Box>
-                <Box pad="small">
-                    <Button
-                        secondary
-                        color="main"
-                        onClick={() => reset()}
-                        label="Reset"
-                    />
-                </Box>
-                
-            </Box>
+                :
+                <Redirect to={{
+                        pathname: '/login',
+                        state: {redir: '/create'}
+                    }} 
+                />
+            }
         </Box>
     );
 }

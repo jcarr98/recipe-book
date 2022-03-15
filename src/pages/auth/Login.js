@@ -15,10 +15,13 @@ export default function Login(props) {
     });
     
     function onSuccess(res) {
-        Axios.get(`${process.env.REACT_APP_BACKEND}auth/validUser`, {params: {email: res.profileObj.email, tokenId: res.tokenId}}).then((serverResponse) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND}/auth/validUser`, {params: {tokenId: res.tokenId}}).then((serverResponse) => {
             if(serverResponse.data === true) {
                 props.setToken(res.tokenId);
+                localStorage.setItem('authToken', res.tokenId);
                 alert("Login successful");
+
+                window.location.href = '/';
             } else {
                 alert("Login failed");
             }

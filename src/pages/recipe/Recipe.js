@@ -28,8 +28,7 @@ function Recipe() {
         setLoading(true);
 
         // Load recipe info
-        let api = process.env.REACT_APP_BACKEND + "get/" + id;
-        Axios.get(api).then((data) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND}/get/${id}`).then((data) => {
             if(data.data.length === 0) {
                 setError(true);
                 document.title = "Error";

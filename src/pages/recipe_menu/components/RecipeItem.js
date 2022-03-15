@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Box, Button, Card, CardHeader, CardBody, CardFooter, Heading } from 'grommet';
-import { BsHeart, BsHeartFill } from 'react-icons/bs';
+import { BsHeart, BsHeartFill, BsTrash } from 'react-icons/bs';
 
 export default function RecipeItem(props) {
     const [el, setEl] = useState("none");
@@ -12,6 +12,11 @@ export default function RecipeItem(props) {
     function updateFavorite() {
         // Use callbacks to update cookie
         props.favorited ? props.remove(props.item.id) : props.add(props.item.id);
+    }
+
+    function deleteItem() {
+        console.log(`Recipe item deleting ${props.item.id}`);
+        props.delete(props.item.id);
     }
 
     return(
@@ -49,12 +54,22 @@ export default function RecipeItem(props) {
                         onClick={() => updateFavorite()} 
                         label={props.favorited ? <BsHeartFill size="1.25em" color="main" /> : <BsHeart size="1.25em" color="main" />}
                     />
+                    {/* Delete button (only shows if admin) */}
+                    {props.isAdmin ? 
+                        <Button
+                            secondary
+                            plain
+                            color="main"
+                            onClick={() => deleteItem()}
+                            label={<BsTrash color="main" size="1.25em" />}
+                        />
+                        : null}
                 </CardFooter>
             </Card>
         ) : (
             // List view
             <Box full align="center">
-                <li key={props.item.id}>
+                <li style={{listStyleType: "none"}} key={props.item.id}>
                     <Box fill direction="row" align="center">
                         {/* Link to recipe */}
                         <Box pad="small">

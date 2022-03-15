@@ -15,6 +15,7 @@ export default function RecipeMenu() {
     /* States */
     // Constant states
     const [recipeList, setRecipeList] = useState([]);
+    const [loggedIn, setLogginIn] = useState(false);
     // Changing states
     const [loading, setLoading] = useState(true);
     const [searchValue, setSearchValue] = useState([]);
@@ -30,16 +31,28 @@ export default function RecipeMenu() {
         loadCookies();
 
         // Get all recipes
-        let api = process.env.REACT_APP_BACKEND + "get";
-        Axios.get(api).then((data) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND}/get`).then((data) => {
             if(data.data.length === 0) {
                 setError(true);
             } else {
                 setRecipeList(data.data);
             }
-
-            setLoading(false);
         });
+
+        // Check auth
+        const authToken = localStorage.getItem('authToken');
+        if(authToken !== null) {
+            Axios.get(`${process.env.REACT_APP_BACKEND}/auth/validUser`, {params: {tokenId: localStorage.getItem('authToken')}}).then((res) => {
+                if(res.data) {
+                    setLogginIn(true);
+                }
+
+                setLoading(false);
+            });
+        } else {
+            console.log('no auth token');
+            setLoading(false);
+        }
     }, []);
 
     function loadCookies() {
@@ -97,9 +110,64 @@ export default function RecipeMenu() {
         localStorage.setItem('favorites', JSON.stringify(newFavorites));
     }
 
+    const deleteItem = (id) => {
+        console.log(`RecipeMenu deleting ${id}`);
+        // Confirm user is authed
+        if(!loggedIn) {
+            alert("You must be an admin!");
+            return;
+        }
+
+        // Get user's auth token
+        let authToken = localStorage.getItem('authToken');
+        // Call delete api
+        Axios.post(`${process.env.REACT_APP_BACKEND}/deleteRecipe`, {data: {recipeId: id, token: authToken}}).then((response) => {
+            // Check if successful or not
+            if(response.data.status > 0) {
+                alert("Recipe successfully deleted!");
+                if(response.data.categoryDeleted !== null) {
+                    // TODO - Remove from categories list
+                }
+
+                // Remove recipe from list
+                removeFromRecipesList(id);
+            } else {
+                alert("Deletion failed");
+            }
+        })
+    }
+
+    function removeFromRecipesList(id) {
+        let newRecipeList = [...recipeList];
+        for(let i = 0; i < newRecipeList.length; i++) {
+            if(newRecipeList[i].id === id) {
+                newRecipeList.splice(i, 1);
+                break;
+            }
+        }
+
+        setRecipeList(newRecipeList);
+    }
+
     return (
         <Box align="center" full responsive>
             <Heading pad="medium" alignSelf="center">Jean's Recipe Book</Heading>
+
+            {loggedIn ? 
+                <Box pad="medium" align="center" background="main">
+                    <Box><Text>Admin Panel</Text></Box>
+
+                    <Box direction="row">
+                        <Box pad="small">
+                            <Button label="New Recipe" onClick={() => window.location.href='/create'} color="secondary" />
+                        </Box>
+                        <Box pad="small">
+                            <Button label="Log out" onClick={() => alert("Not implemented")} color="secondary" />
+                        </Box>
+                    </Box>
+                </Box>
+            : null}
+
             <Nav direction="row" align="center" background="main" width="75%" pad="medium" responsive>
                 <Categories loading={loading} setCategoriesValue={setCategoriesValue} />
                 <TextInput
@@ -146,8 +214,11 @@ export default function RecipeMenu() {
                         return(val.name.toLowerCase().indexOf(searchValue) > -1 ? true : false);
                     }).map((val,key) => {
                         return(
-                            <RecipeItem 
+                            <RecipeItem
+                                key={key}
                                 view={boxView}
+                                isAdmin={loggedIn}
+                                delete={deleteItem}
                                 item={val}
                                 favorited={favorites.includes(val.id)}
                                 add={addToFavorites}
