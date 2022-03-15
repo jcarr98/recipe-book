@@ -15,6 +15,7 @@ import ServerError from '../../components/ServerError';
 
 export default function RecipeMenu() {
     /* States */
+    const clientId = process.env.REACT_APP_OAUTH_CLIENT_ID;
     // Constant states
     const [recipeList, setRecipeList] = useState([]);
     const [loggedIn, setLogginIn] = useState(false);
@@ -68,6 +69,7 @@ export default function RecipeMenu() {
     function onLogoutSuccess() {
         alert('Successfully logged out');
         localStorage.setItem('authToken', '');
+        setLogginIn(false);
     }
 
     function onFailure() {
@@ -173,16 +175,19 @@ export default function RecipeMenu() {
         <Box align="center" full responsive>
             <Heading pad="medium" alignSelf="center">Jean's Recipe Book</Heading>
 
+            
             {loggedIn ? 
-                <Box pad="medium" align="center" background="main">
-                    <Box><Text>Admin Panel</Text></Box>
+                <Box pad="small" align="center" fill responsive>
+                    <Box align="center" background="main" width="50%">
+                        <Box><h3>Admin Panel</h3></Box>
 
-                    <Box direction="row">
-                        <Box pad="small">
-                            <Button label="New Recipe" onClick={() => window.location.href='/create'} color="secondary" />
-                        </Box>
-                        <Box pad="small">
-                            <Button label="Log out" onClick={() => alert("Not implemented")} color="secondary" />
+                        <Box direction="row">
+                            <Box pad="small">
+                                <Button label="New Recipe" onClick={() => window.location.href='/create'} color="secondary" />
+                            </Box>
+                            <Box pad="small">
+                                <Button label="Log out" onClick={signOut} color="secondary" />
+                            </Box>
                         </Box>
                     </Box>
                 </Box>
