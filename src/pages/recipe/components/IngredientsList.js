@@ -59,7 +59,7 @@ function IngredientsList(props) {
                                 <TableRow key={val.uid}>
                                     <TableCell scope="row" border="bottom" key={`${key}:A`}>
                                         <Text>{val.name}</Text>
-                                        <Text> {val.optional === 1 ? "(optional)" : ''}</Text>
+                                        <Text> {val.optional ? "(optional)" : ''}</Text>
                                     </TableCell>
                                     <TableCell scope="row" border="left right" key={`${key}:B`}>
                                         <Text>{val.amount}</Text>
