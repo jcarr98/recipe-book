@@ -60,14 +60,12 @@ export default function StepTable(props) {
         setChecked(false);
 
         setValues(newVals);
-
-        console.log(items);
     }
 
     function removeItem(i) {
         // Remove item externally
         if(!props.removeItemExternally(items[i])) {
-            console.log("failure");
+            console.log(`Failure to remove ${items[i]}`);
             return false;
         }
 

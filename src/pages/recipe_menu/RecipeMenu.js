@@ -53,7 +53,7 @@ export default function RecipeMenu() {
                 setLoading(false);
             });
         } else {
-            console.log('no auth token');
+            console.log('No auth token');
             setLoading(false);
         }
     }, []);
@@ -133,7 +133,6 @@ export default function RecipeMenu() {
     }
 
     const deleteItem = (id) => {
-        console.log(`RecipeMenu deleting ${id}`);
         // Confirm user is authed
         if(!loggedIn) {
             alert("You must be an admin!");

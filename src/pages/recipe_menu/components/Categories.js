@@ -38,7 +38,7 @@ export default function Categories(props) {
                 let current = data.data[i];
                 let item = {
                     label: current.name,
-                    val: current.id_categories
+                    val: current.id
                 }
 
                 items.push(item);
