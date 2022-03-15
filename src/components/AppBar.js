@@ -3,7 +3,7 @@ import React from 'react';
 import { Anchor, Box, Header, Menu, Text } from 'grommet';
 import { Apps, Home } from 'grommet-icons';
 
-function AppBar(props) {
+function AppBar() {
     return(
         <Header
         background="main" 
