@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import { useGoogleLogout } from 'react-google-login';
+
 import Axios from 'axios';
 import { Accordion, AccordionPanel, Box, Button, Grid, Heading, Nav, Text, TextInput } from 'grommet';
 
@@ -54,6 +56,24 @@ export default function RecipeMenu() {
             setLoading(false);
         }
     }, []);
+
+    /*************/
+    /* Signout Code */
+    const { signOut } = useGoogleLogout({
+        clientId,
+        onLogoutSuccess,
+        onFailure
+    });
+
+    function onLogoutSuccess() {
+        alert('Successfully logged out');
+        localStorage.setItem('authToken', '');
+    }
+
+    function onFailure() {
+        alert('Logout failed');
+    }
+    /************/
 
     function loadCookies() {
         // Load favorites
