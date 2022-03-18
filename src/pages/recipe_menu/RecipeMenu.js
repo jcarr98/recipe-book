@@ -235,7 +235,7 @@ export default function RecipeMenu() {
                             return categoriesValue.includes(val.category);
                         }
                     }).filter(function(val,key) {
-                        return(val.name.toLowerCase().indexOf(searchValue) > -1 ? true : false);
+                        return(val.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1 ? true : false);
                     }).map((val,key) => {
                         return(
                             <RecipeItem
