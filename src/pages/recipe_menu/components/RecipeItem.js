@@ -38,13 +38,8 @@ export default function RecipeItem(props) {
                     </Box>
                 </CardHeader>
                 <CardBody pad="small">
-                    <Box>
-                        <Text>Author: {props.item.author}</Text>
-                    </Box>
-                    <br />
-                    <Box>
-                        <Text>{props.item.details}</Text>
-                    </Box>
+                    <p>Author: {props.item.author}</p>
+                    <p>{props.item.details}</p>
                 </CardBody>
                 <CardFooter pad="small">
                     {/* Link to recipe */}
