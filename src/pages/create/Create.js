@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 
 import Axios from 'axios';
 
 import { Box, Button, RadioButtonGroup, Text, TextArea, TextInput } from 'grommet';
+import { LinkPrevious } from 'grommet-icons';
 
 import IngredientsManager from './components/IngredientsManager';
 import DirectionsManager from './components/DirectionsManager';
@@ -19,6 +21,8 @@ export default function Create() {
     const [directions, setDirections] = useState([]);  // List of all directions
     const [categories, setCategories] = useState([]);
     const [customCat, setCustomCat] = useState("");
+
+    const history = useHistory();
 
     useEffect(() => {
         // Get all categories
@@ -125,8 +129,27 @@ export default function Create() {
         return true;
     }
 
+    function back() {
+        let goBack = window.confirm("Are you sure you want to go back? Your input will not be saved");
+
+        if(goBack) {
+            history.push('/');
+        }
+    }
+
     return(
         <Box align="center" responsive>
+            {/* Back to recipe list */}
+            <Box align="start" pad="medium" fill>
+                <Button 
+                    onClick={() => back()}
+                    color="main" 
+                    icon={ <LinkPrevious color="main" size="medium" /> } 
+                    label={"Back to recipe list"}
+                    plain
+                />
+            </Box>
+
             {loggedIn === null ?
                 <Loading text={"Checking permissions..."} />
                 :
