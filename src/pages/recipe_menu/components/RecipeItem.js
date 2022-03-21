@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { Box, Button, Card, CardHeader, CardBody, CardFooter, Heading, Text } from 'grommet';
+import { Box, Button, Card, CardHeader, CardBody, CardFooter, Heading } from 'grommet';
 import { BsHeart, BsHeartFill, BsTrash } from 'react-icons/bs';
 
 export default function RecipeItem(props) {
