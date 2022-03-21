@@ -39,11 +39,11 @@ export default function RecipeItem(props) {
                 </CardHeader>
                 <CardBody pad="small">
                     <Box>
-                        <Text>{props.item.details}</Text>
+                        <Text>Author: {props.item.author ? props.item.author : "Unknown"}</Text>
                     </Box>
                     <br />
                     <Box>
-                        <Text>Author: {props.item.author ? props.item.author : "Unknown"}</Text>
+                        <Text>{props.item.details}</Text>
                     </Box>
                 </CardBody>
                 <CardFooter pad="small">
