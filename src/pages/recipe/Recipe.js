@@ -55,8 +55,11 @@ function Recipe() {
             {error ? <ServerError name="this recipe" /> : (
                 <Box align="center" style={{visibility: loading ? "hidden" : "visible"}}>
                     <h1>{recipeInfo.name}</h1>
-                    <p>Author: {recipeInfo.author}</p>
-                    <p>Details: {recipeInfo.details}</p>
+                    <p>
+                        Author: {recipeInfo.author}
+                        <br />
+                        Details: {recipeInfo.details}
+                    </p>
 
                     {/* Favorite Item */}
                     <FavoriteButton info={recipeInfo} />
