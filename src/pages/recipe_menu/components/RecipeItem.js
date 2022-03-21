@@ -37,7 +37,15 @@ export default function RecipeItem(props) {
                         <Heading level="3" weight="bold" align="center">{props.item.name}</Heading>
                     </Box>
                 </CardHeader>
-                <CardBody pad="small">{props.item.details}</CardBody>
+                <CardBody pad="small">
+                    <Box>
+                        {props.item.details}
+                    </Box>
+                    <br />
+                    <Box>
+                        Author: {props.item.author ? props.item.author : "Unknown"}
+                    </Box>
+                </CardBody>
                 <CardFooter pad="small">
                     {/* Link to recipe */}
                     <Button 
