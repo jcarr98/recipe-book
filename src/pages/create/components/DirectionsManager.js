@@ -19,7 +19,6 @@ export default function DirectionsManager(props) {
 
         // Add new direction to full list
         let newDirs = [...props.directions, direction];
-        console.log(newDirs);
         props.setDirections(newDirs);
 
         return true;
