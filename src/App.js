@@ -12,12 +12,11 @@ import Oops from './pages/Oops';
 import Login from './pages/auth/Login';
 
 function App() {
-    const title = "Jean's Recipe Book";
     const [token, setToken] = useState(null);
 
     useEffect(() => {
-        document.title = title;
-    }, [title]);
+        document.title = "Jean's Recipe Book - Jeffrey Carr";
+    }, []);
 
     return (
         <Box>
