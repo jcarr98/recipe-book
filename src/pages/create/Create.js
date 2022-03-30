@@ -237,18 +237,9 @@ export default function Create() {
                                     primary 
                                     color="main"
                                     onClick={() => send()}
-                                    label="Save to Recipe Book"
+                                    label={<Text color='mainText'>Save to Recipe Book</Text>}
                                 />
                             </Box>
-                            <Box pad="small">
-                                <Button
-                                    secondary
-                                    color="main"
-                                    onClick={() => reset()}
-                                    label="Reset"
-                                />
-                            </Box>
-                            
                         </Box>
                     </Box>
                 :
