@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import { Box } from 'grommet';
 
@@ -12,7 +12,6 @@ import Oops from './pages/Oops';
 import Login from './pages/auth/Login';
 
 function App() {
-    const [token, setToken] = useState(null);
 
     useEffect(() => {
         document.title = "Jean's Recipe Book - Jeffrey Carr";
@@ -20,19 +19,15 @@ function App() {
 
     return (
         <Box>
-            <AppBar token={token} setToken={setToken} />
+            <AppBar />
             <Router>
-                <Switch>
-                    <Route path="/" exact component={RecipeMenu} />
-                    <Route path="/recipe/:id" component={Recipe} />
-                    <Route path="/login" render={() => (
-                        <Login setToken={setToken} />
-                    )} />
-                    <Route path="/create" render={() => (
-                        <Create setToken={setToken} token={token} />
-                    )}/>
-                    <Route component={Oops} />
-                </Switch>
+                <Routes>
+                    <Route path="/" element={<RecipeMenu />} />
+                    <Route path="/recipe/:id" element={<Recipe />} />
+                    <Route path='/login' element={<Login />} />
+                    <Route path='/create' element={<Create />} />
+                    <Route path='*' element={<Oops />} />
+                </Routes>
             </Router>
         </Box>
         

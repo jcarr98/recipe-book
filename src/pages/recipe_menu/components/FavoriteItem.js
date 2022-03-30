@@ -1,11 +1,11 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Button } from 'grommet';
 import { Trash } from 'grommet-icons';
 
 function FavoriteItem(props) {
-    const history = useHistory();
+    const navigate = useNavigate();
 
     function remove() {
         props.remove(props.id);
@@ -18,7 +18,7 @@ function FavoriteItem(props) {
                     secondary
                     plain
                     color="main"
-                    onClick={() => {history.push(`/recipe/${props.id}`)}}
+                    onClick={() => {navigate(`/recipe/${props.id}`)}}
                     label={props.name}
                 />
             </Box>

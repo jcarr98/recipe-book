@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { useGoogleLogout } from 'react-google-login';
 
@@ -19,6 +20,8 @@ export default function RecipeMenu() {
     // Constant states
     const [recipeList, setRecipeList] = useState([]);
     const [loggedIn, setLogginIn] = useState(false);
+    const [userName, setUserName] = useState(null);
+    const navigate = useNavigate();
     // Changing states
     const [loading, setLoading] = useState(true);
     const [searchValue, setSearchValue] = useState([]);
@@ -46,8 +49,9 @@ export default function RecipeMenu() {
         const authToken = localStorage.getItem('authToken');
         if(authToken !== null) {
             Axios.get(`${process.env.REACT_APP_BACKEND}/auth/validUser`, {params: {tokenId: localStorage.getItem('authToken')}}).then((res) => {
-                if(res.data) {
+                if(res.data.status) {
                     setLogginIn(true);
+                    setUserName(res.data.user);
                 }
 
                 setLoading(false);
@@ -172,25 +176,48 @@ export default function RecipeMenu() {
 
     return (
         <Box align="center" full responsive>
-            <Heading pad="medium" alignSelf="center">Jean's Recipe Book</Heading>
-
-            
-            {loggedIn ? 
-                <Box pad="small" align="center" fill responsive>
-                    <Box align="center" background="main" width="50%">
-                        <Box><h3>Admin Panel</h3></Box>
-
-                        <Box direction="row">
-                            <Box pad="small">
-                                <Button label="New Recipe" onClick={() => window.location.href='/create'} color="secondary" />
+            <Box fill align='center' pad='medium'>
+                <Heading alignSelf="center">Jean's Recipe Book</Heading>
+                {loggedIn ? 
+                    <Box fill align='center'>
+                        <Box pad='small'>
+                            <Text color='mainText'>Hi, {userName}. You're logged in</Text>
+                        </Box>
+                        <Box align="center"  responsive direction='row'>
+                            <Box pad={{horizontal: 'small'}}>
+                                <Button 
+                                    primary
+                                    color='main'
+                                    label={<Text color='mainText'>New Recipe</Text>} 
+                                    onClick={() => window.location.href='/create'}
+                                />
                             </Box>
-                            <Box pad="small">
-                                <Button label="Log out" onClick={signOut} color="secondary" />
+                            <Box>
+                                <Button
+                                    secondary
+                                    color='secondary'
+                                    label={<Text color='mainText'>Log Out</Text>} 
+                                    onClick={signOut}
+                                />
                             </Box>
                         </Box>
                     </Box>
-                </Box>
-            : null}
+                : 
+                    <Box fill align='center'>
+                        <Box pad='small'>
+                            <Text color='mainText'>You are not logged in.</Text>
+                        </Box>
+                        <Box>
+                            <Button
+                                primary
+                                color='main'
+                                label={<Text color='mainText'>Log in</Text>}
+                                onClick={() => {navigate('/login')}}
+                            />
+                        </Box>
+                    </Box>
+                }
+            </Box>
 
             <Nav direction="row" align="center" background="main" width="75%" pad="medium" responsive>
                 <Categories loading={loading} setCategoriesValue={setCategoriesValue} />
@@ -199,7 +226,7 @@ export default function RecipeMenu() {
                     onChange={event => setSearchValue(event.target.value)}
                     a11yTitle="A search box to filter shown recipes"
                 />
-                <Button color="secondary" label="Change View" onClick={changeView} />
+                <Button color="secondary" label={<Text color='mainText'>Change View</Text>} onClick={changeView} />
             </Nav>
             <Accordion width="70%">
                 <AccordionPanel label="Favorites">

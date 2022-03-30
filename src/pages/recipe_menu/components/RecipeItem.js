@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import { Box, Button, Card, CardHeader, CardBody, CardFooter, Heading } from 'grommet';
+import { Box, Button, Card, CardHeader, CardBody, CardFooter, Heading, Text } from 'grommet';
 import { BsHeart, BsHeartFill, BsTrash } from 'react-icons/bs';
 
 export default function RecipeItem(props) {
     const [el, setEl] = useState("none");
-    const history = useHistory();
+    const navigate = useNavigate();
 
     /** Update the status of whether this item is favorited or not */
     function updateFavorite() {
@@ -28,43 +28,43 @@ export default function RecipeItem(props) {
                 elevation={el}
                 pad="medium"
                 key={props.item.id}
-                background="secondary"
+                background="main"
                 onMouseEnter={() => setEl("xlarge")}
                 onMouseLeave={() => setEl("none")}
             >
                 <CardHeader size="small" width="full" round>
                     <Box width="full" align="center">
-                        <Heading level="3" weight="bold" align="center">{props.item.name}</Heading>
+                        <Heading level="3" weight="bold" align="center" color='mainText'>{props.item.name}</Heading>
                     </Box>
                 </CardHeader>
                 <CardBody pad="small">
-                    <p>Author: {props.item.author}</p>
-                    <p>{props.item.details}</p>
+                    <Text color='mainText'>{props.item.author}</Text>
+                    <Text color='mainText'>{props.item.details}</Text>
                 </CardBody>
                 <CardFooter pad="small">
                     {/* Link to recipe */}
                     <Button 
                         primary 
-                        color="main" 
-                        onClick={() => {history.push('/recipe/' + props.item.id)}}
+                        color="secondary" 
+                        onClick={() => {navigate(`recipe/${props.item.id}`)}}
                         label="Open" 
                     />
                     {/* Add to favorites */}
                     <Button 
                         secondary 
                         plain
-                        color="main"
+                        color="secondary"
                         onClick={() => updateFavorite()} 
-                        label={props.favorited ? <BsHeartFill size="1.25em" color="main" /> : <BsHeart size="1.25em" color="main" />}
+                        label={props.favorited ? <BsHeartFill size="1.25em" color="secondary" /> : <BsHeart size="1.25em" color="secondary" />}
                     />
                     {/* Delete button (only shows if admin) */}
                     {props.isAdmin ? 
                         <Button
                             secondary
                             plain
-                            color="main"
+                            color="secondary"
                             onClick={() => deleteItem()}
-                            label={<BsTrash color="main" size="1.25em" />}
+                            label={<BsTrash color="secondary" size="1.25em" />}
                         />
                         : null}
                 </CardFooter>
@@ -82,7 +82,7 @@ export default function RecipeItem(props) {
                                 color="main"
                                 pad="medium"
                                 label={props.item.name}
-                                onClick={() => {history.push('/recipe/' + props.item.id)}}
+                                onClick={() => {navigate(`recipe/${props.item.id}`)}}
                             />
                         </Box>
                         {/* Add to favorites */}

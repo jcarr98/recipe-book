@@ -10,21 +10,22 @@ const theme = {
       family: "Oxygen"
     },
     colors: {
-      main: '#da5555',
-      secondary: '#4d4d4d',
+      main: '#4287f5',
+      secondary: '#21447b',
       mainText: '#ffffff',
       secondaryText: '#000000',
+      background: '#333333',
       placeholder: '#ffffff'
     },
     elevation: {
       dark: {
         none: 'none',
         // You can override the values for box-shadow here.
-        xsmall: '0px 2px 2px rgba(218, 85, 85, 1.00)',
-        small: '0px 4px 4px rgba(218, 85, 85, 1.00)',
-        medium: '0px 6px 8px rgba(218, 85, 85, 1.00)',
-        large: '0px 8px 16px rgba(218, 85, 85, 1.00)',
-        xlarge: '0px 12px 24px rgba(218, 85, 85, 1.00)',
+        xsmall: '0px 2px 2px rgba(17, 34, 62, 1.00)',
+        small: '0px 4px 4px rgba(17, 34, 62, 1.00)',
+        medium: '0px 6px 8px rgba(17, 34, 62, 1.00)',
+        large: '0px 8px 16px rgba(17, 34, 62, 1.00)',
+        xlarge: '0px 12px 24px rgba(17, 34, 62, 1.00)',
       },
     },
   }

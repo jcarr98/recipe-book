@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import Axios from 'axios';
 
-import { Box, CheckBoxGroup, DropButton } from 'grommet';
+import { Box, CheckBoxGroup, DropButton, Text } from 'grommet';
 
 import Loading from '../../../components/Loading';
 
@@ -65,10 +65,10 @@ export default function Categories(props) {
     return(
         <DropButton 
             color="secondary"
-            label="Filters"
+            label={<Text color='mainText'>Filters</Text>}
             dropAlign={{top: 'bottom', right: 'right'}}
             dropContent={
-                <Box pad="medium">
+                <Box pad="medium" background='background'>
                     {props.loading ? <Loading text="Loading Categories..." /> : (
                         <CheckBoxGroup 
                             color="main"

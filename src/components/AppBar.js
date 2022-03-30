@@ -12,8 +12,8 @@ function AppBar() {
         style={{ position: "sticky", top: "0", zIndex: "1" }}
         responsive
         >
-            <Anchor onClick={() => window.location.href = '/'} color="mainText">
-                <Home />
+            <Anchor onClick={() => window.location.href = '/'}>
+                <Home color='mainText' />
             </Anchor>
             <Box align='center'>
                 <Box>
@@ -24,19 +24,20 @@ function AppBar() {
                 </Box>
             </Box>
             <Menu
+                dropBackground='background'
                 dropAlign={{
                     top: "bottom",
                     left: "left"
                 }}
                 items={[
-                    {label: "Main Website", onClick: () => {window.location.href = "https://www.jeffreycarr.dev"}},
+                    {label: "Main Website", onClick: () => {window.location.href = 'https://www.jeffreycarr.dev'}},
                     {label: "Recipe Book", onClick: () => {window.location.href = 'https://www.recipe.jeffreycarr.dev'}},
                     {label: "Bingo Creator (beta)", onClick: () => {window.location.href = 'https://www.bingo.jeffreycarr.dev'}}
                 ]}
             >
                 <Box direction="column" align="center">
-                    <Apps />
-                    <Text size="small">Apps</Text>
+                    <Apps color='mainText' />
+                    <Text color='mainText' size="small">Apps</Text>
                 </Box>
             </Menu>
         </Header>

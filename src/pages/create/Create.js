@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { Redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import Axios from 'axios';
 
@@ -22,7 +21,7 @@ export default function Create() {
     const [categories, setCategories] = useState([]);
     const [customCat, setCustomCat] = useState("");
 
-    const history = useHistory();
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Get all categories
@@ -51,7 +50,7 @@ export default function Create() {
         const authToken = localStorage.getItem('authToken');
         if(authToken !== null) {
             Axios.get(`${process.env.REACT_APP_BACKEND}/auth/validUser`, {params: {tokenId: authToken}}).then((res) => {
-                if(res.data) {
+                if(res.data.status) {
                     setLoggedIn(true);
                 } else {
                     setLoggedIn(false);
@@ -133,7 +132,7 @@ export default function Create() {
         let goBack = window.confirm("Are you sure you want to go back? Your input will not be saved");
 
         if(goBack) {
-            history.push('/');
+            navigate('/');
         }
     }
 
@@ -253,11 +252,7 @@ export default function Create() {
                         </Box>
                     </Box>
                 :
-                <Redirect to={{
-                        pathname: '/login',
-                        state: {redir: '/create'}
-                    }} 
-                />
+                navigate('/login')
             }
         </Box>
     );
