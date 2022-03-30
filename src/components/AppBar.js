@@ -15,9 +15,12 @@ function AppBar() {
             <Anchor onClick={() => window.location.href = '/'} color="mainText">
                 <Home />
             </Anchor>
-            <Box direction="row">
-                <Box pad="small">
-                    <Text size="xlarge" weight="bold">Jeffrey Carr</Text>
+            <Box align='center'>
+                <Box>
+                    <Text color='mainText' size="xlarge" weight="bold">Jeffrey Carr</Text>
+                </Box>
+                <Box>
+                    <Text color="mainText">Jean's Recipe Book</Text>
                 </Box>
             </Box>
             <Menu
