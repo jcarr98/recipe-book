@@ -38,7 +38,7 @@ export default function RecipeItem(props) {
                     </Box>
                 </CardHeader>
                 <CardBody pad="small">
-                    <Text color='mainText'>{props.item.author}</Text>
+                    <Text color='mainText'>Uploaded by: {props.item.author}</Text>
                     <Text color='mainText'>{props.item.details}</Text>
                 </CardBody>
                 <CardFooter pad="small">
